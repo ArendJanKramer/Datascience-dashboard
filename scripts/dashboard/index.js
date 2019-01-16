@@ -20,20 +20,74 @@ var failures = 0;
 
 function updateDatasets() {
     $.getJSON("api/get_datasets", function (data) {
-        $('ul#dataset li').remove();
 
-        for (var key in data) {
-            // check if the property/key is defined in the object itself, not in parent
-            if (data.hasOwnProperty(key)) {
-                $('ul#dataset').append('<li><a data-maker="' + data[key] + '">' + data[key] + '</a></li>');
-            }
-        }
+        //         var $select = $("#dataset-select");
+        // $("#dataset-select optgroup").remove();
+        // $("#dataset-select option").remove();
+        // $select.attr('disabled', 'disabled');
+        //
+        //
+        // $.each(data, function (i, optgroups) {
+        //     $.each(optgroups, function (groupName, options) {
+        //         var $optgroup = $("<optgroup>", {label: groupName});
+        //         $optgroup.appendTo($select);
+        //
+        //         $.each(options, function (j, option) {
+        //             var $option = $("<option>", {text: option, value: option});
+        //             $option.appendTo($optgroup);
+        //         });
+        //     });
+        // });
+        //
+        // $select.removeAttr('disabled');
+        //
+        // $select.change(function () {
+        //     if($select.attr("disabled"))
+        //         return;
+        //     var dataset_name = $('#dataset-select :selected').attr('value');
+        //     var dataset_provider = $('#dataset-select :selected').parent().attr('label');
+        //     console.log(dataset_name);
+        //     console.log(dataset_provider);
+        //
+        //     $.ajax({
+        //         type: "POST",
+        //         url: "api/set_dataset",
+        //         data: JSON.stringify({'dataprovider': dataset_provider, 'dataset': dataset_name}),
+        //         success: function () {
+        //             updateAll();
+        //         }
+        //     });
+        //
+        // });
 
-        $('ul#dataset li').click(function () {
+        var $select = $("#dataset-dropdown");
+
+        $('ul#dataset-dropdown li').remove();
+        $('ul#dataset-dropdown strong').remove();
+
+        $.each(data, function (i, optgroups) {
+            $.each(optgroups, function (groupName, options) {
+                var $optgroup = $("<strong>", {text: groupName, class: "dropdown-header font-weight-bold"});
+                $optgroup.appendTo($select);
+
+                $.each(options, function (j, option) {
+                    $('ul#dataset-dropdown').append('<li><a data-maker="' + option + '" dataprovider="' + groupName + '">' + option + '</a></li>');
+
+                    // var $option = $("<li>", {text: option, class: "dropdown-item"});
+                    // $option.appendTo($select);
+                    // $("<br>").appendTo($select);
+                });
+            });
+        });
+
+
+        $('ul#dataset-dropdown a').click(function () {
+            let dataset_provider = $(this).attr("dataprovider");
+            let dataset_name = $(this).text();
             $.ajax({
                 type: "POST",
                 url: "api/set_dataset",
-                data: $(this).text(),
+                data: JSON.stringify({'dataprovider': dataset_provider, 'dataset': dataset_name}),
                 success: function () {
                     updateAll();
                 }
@@ -61,7 +115,7 @@ function updateSummary() {
         $("#summary_loss_function").text(String(data.loss_function));
         $("#summary_last_epoch").text(String(data.last_epoch));
 
-        $("#dataset-button").text(String(data.dataset));
+        $("#dropdown-button").text(String(data.dataset));
 
     }).done(function () {
         // Reload graph after 10 minutes

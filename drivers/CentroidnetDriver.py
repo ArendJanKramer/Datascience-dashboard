@@ -12,12 +12,13 @@ import platform
 
 
 class CentroidnetDriver(Driver):
+    driverName = "centroidnet"
     data_dirs = {}
     current_data_dir = ""
     root_folder = "../centroidnet"
 
     def __init__(self):
-        self.update_data_dirs()
+        self.find_datasets()
         if platform.node().startswith("n550jv"):
             self.root_folder = "/extern/centroidnet"
 
@@ -36,7 +37,7 @@ class CentroidnetDriver(Driver):
                     result[epoch] = loss
         return result
 
-    def update_data_dirs(self):
+    def find_datasets(self):
         result = []
         data_dirs_new = {}
         # Sometimes, this fails so the global list is updated when everything went well
@@ -51,7 +52,7 @@ class CentroidnetDriver(Driver):
         return result
 
     def get_datafiles_paths(self):
-        self.update_data_dirs()
+        self.find_datasets()
 
         if len(list(self.data_dirs.keys())) == 0:
             return "", ""
@@ -98,10 +99,11 @@ class CentroidnetDriver(Driver):
                         break
             last_epoch_time = datetime.datetime.utcfromtimestamp(os.path.getmtime(training_file)).strftime("%d-%b %H:%M")
 
-        return json.dumps({"loss_function": result.strip(), "dataset": self.current_data_dir, "last_epoch": last_epoch_time})
+        return {"loss_function": result.strip(), "dataset": self.current_data_dir, "last_epoch": last_epoch_time}
 
     def get_datasets(self):
-        return json.dumps(natsorted(self.update_data_dirs()))
+        datasets = natsorted(self.find_datasets())
+        return {"centroidnet": datasets}
 
     def set_dataset(self, folder):
         self.current_data_dir = folder
