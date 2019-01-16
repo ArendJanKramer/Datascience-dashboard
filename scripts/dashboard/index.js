@@ -25,7 +25,7 @@ function updateDatasets() {
         for (var key in data) {
             // check if the property/key is defined in the object itself, not in parent
             if (data.hasOwnProperty(key)) {
-                $('ul#dataset').append('<li><a href="#" data-maker="' + data[key] + '">' + data[key] + '</a></li>');
+                $('ul#dataset').append('<li><a data-maker="' + data[key] + '">' + data[key] + '</a></li>');
             }
         }
 

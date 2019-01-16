@@ -1,5 +1,5 @@
 from flask import Flask, send_from_directory, request
-from drivers.centroidnetDriver import centroidnetDriver
+from drivers.CentroidnetDriver import CentroidnetDriver
 
 # set the project root directory as the static folder, you can set others.
 app = Flask(__name__, static_url_path='')
@@ -49,5 +49,5 @@ def set_dataset():
 
 
 if __name__ == "__main__":
-    driver = centroidnetDriver()
+    driver = CentroidnetDriver()
     app.run(port=int("8181"), host= '0.0.0.0')

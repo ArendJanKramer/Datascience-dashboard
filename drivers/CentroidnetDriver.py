@@ -11,7 +11,7 @@ logger = logging.getLogger('centroidnetDriver')
 import platform
 
 
-class centroidnetDriver(Driver):
+class CentroidnetDriver(Driver):
     data_dirs = {}
     current_data_dir = ""
     root_folder = "../centroidnet"
