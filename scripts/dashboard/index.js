@@ -114,8 +114,11 @@ function updateSummary() {
 
         $("#summary_loss_function").text(String(data.loss_function));
         $("#summary_last_epoch").text(String(data.last_epoch));
-
         $("#dropdown-button").text(String(data.dataset));
+
+        if (data.dataset.length < 1){
+                    $("#dropdown-button").text("No datasets");
+        }
 
     }).done(function () {
         // Reload graph after 10 minutes

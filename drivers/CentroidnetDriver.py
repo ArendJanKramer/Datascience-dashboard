@@ -8,7 +8,6 @@ from natsort import natsorted
 from .Driver import Driver
 
 logger = logging.getLogger('centroidnetDriver')
-import platform
 
 
 class CentroidnetDriver(Driver):
@@ -19,8 +18,6 @@ class CentroidnetDriver(Driver):
 
     def __init__(self):
         self.find_datasets()
-        if platform.node().startswith("n550jv"):
-            self.root_folder = "/extern/centroidnet"
 
     def txt_to_dict(self, file):
         result = {}
